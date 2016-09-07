@@ -109,9 +109,9 @@ module Smstraffic
     # => SMS status codes:
     #            СТАТУС              ТИП
     #    'Нет статуса (blank)' - Промежуточный
-    #    'Acceptd'             - Промежуточный
+    #    'Buffered SMSC'       - Промежуточный
     #    'Delivered'           - Окончательный
-    #    'Non Delivered' -     - Окончательный
+    #    'Non Delivered'       - Окончательный
     #    'Rejected'            - Окончательный
     #    'Expired'             - Окончательный
     #    'Deleted'             - Окончательный
@@ -124,7 +124,7 @@ module Smstraffic
         response = http.request(request)
         body = response.body
         hash = Hash.from_xml(Nokogiri::XML(body).to_s)['reply']
-        hash['status'] || hash['error'] #status or error
+        hash['status']
       end
     end
 
@@ -161,11 +161,11 @@ module Smstraffic
       message, rus = @translit ? [Russian.translit(@message), 0] : [@message, 1]
       message = URI.encode(message)
       subject = URI.encode(@subject)
-      "/smartdelivery-in/multi.php?login=#{@@login}&password=#{@@password}&phones=#{@phone}&message=#{message}&want_sms_ids=1&routeGroupId=#{@@routeGroupId}&rus=#{rus}&originator=#{subject}"
+      "/multi.php?login=#{@@login}&password=#{@@password}&phones=#{@phone}&message=#{message}&want_sms_ids=1&routeGroupId=#{@@routeGroupId}&rus=#{rus}&originator=#{subject}"
     end
 
     def self.status_url(msg_id)
-      "/smartdelivery-in/multi.php?login=#{@@login}&password=#{@@password}&operation=status&sms_id=#{msg_id}"
+      "/multi.php?login=#{@@login}&password=#{@@password}&operation=status&sms_id=#{msg_id}"
     end
 
   end
