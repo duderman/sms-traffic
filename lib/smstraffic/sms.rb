@@ -158,7 +158,7 @@ module Smstraffic
     end
 
     def send_url
-      message, rus = @translit ? [Russian.translit(@message), 0] : [@message, 1]
+      message, rus = @translit ? [Russian.translit(@message), 0] : [@message, 5]
       message = URI.encode(message)
       subject = URI.encode(@subject)
       "/multi.php?login=#{@@login}&password=#{@@password}&phones=#{@phone}&message=#{message}&want_sms_ids=1&routeGroupId=#{@@routeGroupId}&rus=#{rus}&originator=#{subject}"
